@@ -1,0 +1,9 @@
+.container{
+    width: 700px;
+    margin: 0 auto;
+}
+
+.mat-color-itau{
+    background-color: #EC7000;
+    color: white;
+}

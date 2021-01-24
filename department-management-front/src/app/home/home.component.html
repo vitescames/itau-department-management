@@ -1,0 +1,83 @@
+<form>
+    <div class="container">
+
+      <div fxLayout="column" fxLayoutAlign="center">
+
+        <h3>Cadastro de Departamento</h3>
+
+        <div fxLayoutGap="25px">
+          <mat-form-field fxFlex="20">
+            <input matInput placeholder="Código">
+          </mat-form-field>
+          <mat-form-field fxFlex="80">
+            <input matInput placeholder="Nome">
+          </mat-form-field>
+        </div>
+
+        <div fxLayoutGap="25px">
+          <mat-form-field>
+            <input matInput placeholder="Local">
+          </mat-form-field>
+          <mat-form-field>
+            <input matInput placeholder="Cidade">
+          </mat-form-field>
+        </div>
+        
+        <div fxLayoutGap="25px">
+          <div fxFlex="8" fxLayoutAlign="start center">
+              Estado:
+          </div>
+          <mat-form-field fxFlex="30">
+            <mat-select>
+              <mat-option [value]="1">
+                ddada
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+
+        <div style="margin-top: 25px;">
+          <fieldset>
+            <legend>Diretoria</legend>
+            <mat-radio-group fxLayoutGap="25px" aria-label="Select a directory">
+              <mat-radio-button value="1">Option 1</mat-radio-button>
+              <mat-radio-button value="2">Option 2</mat-radio-button>
+              <mat-radio-button value="3">Option 3</mat-radio-button>
+            </mat-radio-group>
+          </fieldset>
+        </div>
+
+        <div style="margin-top: 25px;" fxLayoutAlign="end center">
+          <button mat-raised-button class="mat-color-itau">Salvar</button>
+        </div>
+
+        <table mat-table [dataSource]="departments" class="mat-elevation-z8" style="margin-top: 25px;">
+
+          <ng-container matColumnDef="code">
+            <th mat-header-cell *matHeaderCellDef>Código</th>
+            <td mat-cell *matCellDef="let element"> {{element.id}} </td>
+          </ng-container>
+          
+          <ng-container matColumnDef="name">
+            <th mat-header-cell *matHeaderCellDef>Nome</th>
+            <td mat-cell *matCellDef="let element"> {{element.name}} </td>
+          </ng-container>
+
+          <ng-container matColumnDef="actions">
+            <th mat-header-cell *matHeaderCellDef></th>
+            <td mat-cell *matCellDef="let element">
+              <div fxLayoutAlign="center center" fxLayoutGap="25px">
+                <button mat-raised-button class="mat-color-itau">Editar</button>
+                <button mat-raised-button class="mat-color-itau">Excluir</button>
+              </div>
+            </td>
+          </ng-container>
+          
+          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+
+        </table>
+
+      </div>
+    </div>
+</form>
