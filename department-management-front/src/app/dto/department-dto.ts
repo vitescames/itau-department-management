@@ -1,6 +1,6 @@
-import { DirectoryDto } from './directory-dto';
+import { BoardDto } from './board-dto';
 
-export class DepartmetDto {
+export class DepartmentDto {
 
     public id ?: number;
 	
@@ -12,6 +12,6 @@ export class DepartmetDto {
 	
 	public state ?: string;
 	
-    public directoryDto ?: DirectoryDto;
+    public boardDto ?: BoardDto = new BoardDto();
     
 }

@@ -24,13 +24,12 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import br.com.itau.departmentmanagement.controller.dto.DepartmentDto;
 import br.com.itau.departmentmanagement.exceptions.DepartmentNotFoundException;
-import br.com.itau.departmentmanagement.exceptions.DirectoryNotFoundException;
-import br.com.itau.departmentmanagement.form.DepartmentForm;
+import br.com.itau.departmentmanagement.exceptions.BoardNotFoundException;
 import br.com.itau.departmentmanagement.model.DepartmentEntity;
-import br.com.itau.departmentmanagement.model.DirectoryEntity;
+import br.com.itau.departmentmanagement.model.BoardEntity;
 import br.com.itau.departmentmanagement.response.ResponseMessage;
 import br.com.itau.departmentmanagement.service.DepartmentService;
-import br.com.itau.departmentmanagement.service.DirectoryService;
+import br.com.itau.departmentmanagement.service.BoardService;
 
 
 @RestController
@@ -41,18 +40,18 @@ public class DepartmentController {
 	private DepartmentService departmentService;
 	
 	@Autowired
-	private DirectoryService directoryService;
+	private BoardService boardService;
 	
 	@GetMapping
-	public Page<DepartmentDto> listDepartments(@RequestParam(required = false) String directoryName,
+	public Page<DepartmentDto> listDepartments(@RequestParam(required = false) String boardName,
 			@PageableDefault(sort = "id", direction = Direction.ASC, page = 0, size = 10) Pageable pagination) {
 		
 		Page<DepartmentEntity> departments = null;
 		
-		if(directoryName == null) {
+		if(boardName == null) {
 			departments = departmentService.getAllDepartments(pagination);
 		} else {
-			departments = departmentService.getDepartmentsByDirectory(directoryName, pagination);
+			departments = departmentService.getDepartmentsByBoard(boardName, pagination);
 		}
 		
 		return DepartmentDto.converter(departments);
@@ -81,13 +80,13 @@ public class DepartmentController {
 	
 	@PutMapping("/{id}")
 	@Transactional
-	public ResponseEntity<ResponseMessage> updateDepartment(@PathVariable Integer id, @RequestBody DepartmentForm form) {
+	public ResponseEntity<ResponseMessage> updateDepartment(@PathVariable Integer id, @RequestBody DepartmentDto form) {
 		
 		try {
 		
 			DepartmentEntity department = departmentService.prepareForEdit(id);
 			department.setCity(form.getCity());
-			department.setDirectoryEntity(directoryService.getDirectoryById(form.getDirectoryEntityId()));
+			department.setBoardEntity(boardService.getBoardById(form.getBoardDto().getId()));
 			department.setLocation(form.getLocation());
 			department.setName(form.getName());
 			department.setState(form.getState());
@@ -102,23 +101,23 @@ public class DepartmentController {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).
 					body(new ResponseMessage(HttpStatus.NOT_FOUND.toString(), "Department ID doesn't exist"));
 			
-		} catch (DirectoryNotFoundException e) {
+		} catch (BoardNotFoundException e) {
 			
 			e.printStackTrace();
 			
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).
-					body(new ResponseMessage(HttpStatus.NOT_FOUND.toString(), "Directory ID doesn't exist"));
+					body(new ResponseMessage(HttpStatus.NOT_FOUND.toString(), "Board ID doesn't exist"));
 			
 		}
 	}
 	
 	@PostMapping
 	@Transactional
-	public ResponseEntity<?> saveDepartment(@RequestBody DepartmentForm form, UriComponentsBuilder uriBuilder) {
+	public ResponseEntity<?> saveDepartment(@RequestBody DepartmentDto form, UriComponentsBuilder uriBuilder) {
 		
 		try {
 		
-			DirectoryEntity directoryEntity = directoryService.getDirectoryById(form.getDirectoryEntityId());
+			BoardEntity boardEntity = boardService.getBoardById(form.getBoardDto().getId());
 			
 			Boolean existingDepartment = departmentService.checkIfDepartmentExists(form.getId());
 			
@@ -127,17 +126,17 @@ public class DepartmentController {
 						body(new ResponseMessage(HttpStatus.BAD_REQUEST.toString(), "Department already exists"));
 			}
 			
-			DepartmentEntity department = departmentService.saveDepartment(form, directoryEntity);
+			DepartmentEntity department = departmentService.saveDepartment(form, boardEntity);
 			
 			URI uri = uriBuilder.path("/departments/{id}").buildAndExpand(department.getId()).toUri();
 			return ResponseEntity.created(uri).body(new DepartmentDto(department));
 		
-		}  catch (DirectoryNotFoundException e) {
+		}  catch (BoardNotFoundException e) {
 			
 			e.printStackTrace();
 			
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).
-					body(new ResponseMessage(HttpStatus.NOT_FOUND.toString(), "Directory ID doesn't exist"));
+					body(new ResponseMessage(HttpStatus.NOT_FOUND.toString(), "Board ID doesn't exist"));
 			
 		}
 		

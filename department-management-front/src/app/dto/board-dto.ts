@@ -1,4 +1,4 @@
-export class DirectoryDto {
+export class BoardDto {
 
     public id ?: number;
 	

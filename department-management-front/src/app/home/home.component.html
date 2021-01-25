@@ -7,19 +7,19 @@
 
         <div fxLayoutGap="25px">
           <mat-form-field fxFlex="20">
-            <input matInput placeholder="Código">
+            <input matInput placeholder="Código" [(ngModel)]="departmentDto.id" name="id" [disabled]="updateMode">
           </mat-form-field>
           <mat-form-field fxFlex="80">
-            <input matInput placeholder="Nome">
+            <input matInput placeholder="Nome" [(ngModel)]="departmentDto.name" name="name">
           </mat-form-field>
         </div>
 
         <div fxLayoutGap="25px">
           <mat-form-field>
-            <input matInput placeholder="Local">
+            <input matInput placeholder="Local" [(ngModel)]="departmentDto.location" name="location">
           </mat-form-field>
           <mat-form-field>
-            <input matInput placeholder="Cidade">
+            <input matInput placeholder="Cidade" [(ngModel)]="departmentDto.city" name="city">
           </mat-form-field>
         </div>
         
@@ -28,10 +28,8 @@
               Estado:
           </div>
           <mat-form-field fxFlex="30">
-            <mat-select>
-              <mat-option [value]="1">
-                ddada
-              </mat-option>
+            <mat-select [(ngModel)]="departmentDto.state" name="state">
+              <mat-option *ngFor="let state of states; let i = index" [value]="state">{{state}}</mat-option>
             </mat-select>
           </mat-form-field>
         </div>
@@ -39,19 +37,18 @@
         <div style="margin-top: 25px;">
           <fieldset>
             <legend>Diretoria</legend>
-            <mat-radio-group fxLayoutGap="25px" aria-label="Select a directory">
-              <mat-radio-button value="1">Option 1</mat-radio-button>
-              <mat-radio-button value="2">Option 2</mat-radio-button>
-              <mat-radio-button value="3">Option 3</mat-radio-button>
+            <mat-radio-group fxLayoutGap="25px" aria-label="Select a board" [(ngModel)]="departmentDto.boardDto.id" name="board">
+              <mat-radio-button *ngFor="let board of boards; let i = index" [value]="board.id">{{board.name}}</mat-radio-button>
             </mat-radio-group>
           </fieldset>
         </div>
 
         <div style="margin-top: 25px;" fxLayoutAlign="end center">
-          <button mat-raised-button class="mat-color-itau">Salvar</button>
+          <button mat-raised-button class="mat-color-itau" (click)="saveDepartment()" *ngIf="!updateMode">Salvar</button>
+          <button mat-raised-button class="mat-color-itau" (click)="updateDepartment()" *ngIf="updateMode">Salvar</button>
         </div>
 
-        <table mat-table [dataSource]="departments" class="mat-elevation-z8" style="margin-top: 25px;">
+        <table mat-table [dataSource]="dataSource" class="mat-elevation-z8" style="margin-top: 25px; margin-bottom: 25px;">
 
           <ng-container matColumnDef="code">
             <th mat-header-cell *matHeaderCellDef>Código</th>
@@ -65,10 +62,10 @@
 
           <ng-container matColumnDef="actions">
             <th mat-header-cell *matHeaderCellDef></th>
-            <td mat-cell *matCellDef="let element">
+            <td mat-cell *matCellDef="let element; let i = index">
               <div fxLayoutAlign="center center" fxLayoutGap="25px">
-                <button mat-raised-button class="mat-color-itau">Editar</button>
-                <button mat-raised-button class="mat-color-itau">Excluir</button>
+                <button mat-raised-button class="mat-color-itau" (click)="prepareForEdit(element, i)">Editar</button>
+                <button mat-raised-button class="mat-color-itau" (click)="deleteDepartment()">Excluir</button>
               </div>
             </td>
           </ng-container>

@@ -30,22 +30,22 @@ public class DepartmentEntity {
 	private String state;
 	
 	@ManyToOne(fetch=FetchType.LAZY, cascade=CascadeType.PERSIST)
-	@JoinColumn(name="directory_id")
-	private DirectoryEntity directoryEntity;
+	@JoinColumn(name="board_id")
+	private BoardEntity boardEntity;
 
 	public DepartmentEntity() {
 		super();
 	}
 
 	public DepartmentEntity(Integer departmentId, String departmentName, String departmentLocation,
-			String departmentCity, String departmentState, DirectoryEntity directoryEntity) {
+			String departmentCity, String departmentState, BoardEntity boardEntity) {
 		super();
 		this.id = departmentId;
 		this.name = departmentName;
 		this.location = departmentLocation;
 		this.city = departmentCity;
 		this.state = departmentState;
-		this.directoryEntity = directoryEntity;
+		this.boardEntity = boardEntity;
 	}
 
 	public Integer getId() {
@@ -88,12 +88,12 @@ public class DepartmentEntity {
 		this.state = state;
 	}
 
-	public DirectoryEntity getDirectoryEntity() {
-		return directoryEntity;
+	public BoardEntity getBoardEntity() {
+		return boardEntity;
 	}
 
-	public void setDirectoryEntity(DirectoryEntity directoryEntity) {
-		this.directoryEntity = directoryEntity;
+	public void setBoardEntity(BoardEntity boardEntity) {
+		this.boardEntity = boardEntity;
 	}
 	
 	@Override

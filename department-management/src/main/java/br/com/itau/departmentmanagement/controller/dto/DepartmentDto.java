@@ -16,7 +16,7 @@ public class DepartmentDto {
 	
 	private String state;
 	
-	private DirectoryDto directoryDto;
+	private BoardDto boardDto; 
 	
 	public DepartmentDto() {
 
@@ -28,7 +28,7 @@ public class DepartmentDto {
 		this.location = departmentEntity.getLocation();
 		this.city = departmentEntity.getCity();
 		this.state = departmentEntity.getState();
-		this.directoryDto = DirectoryDto.converter(departmentEntity.getDirectoryEntity());
+		this.boardDto = BoardDto.converter(departmentEntity.getBoardEntity());
 	}
 
 	public int getId() {
@@ -71,12 +71,12 @@ public class DepartmentDto {
 		this.state = state;
 	}
 
-	public DirectoryDto getDirectoryDto() {
-		return directoryDto;
+	public BoardDto getBoardDto() {
+		return boardDto;
 	}
 
-	public void setDirectoryDto(DirectoryDto directoryDto) {
-		this.directoryDto = directoryDto;
+	public void setBoardDto(BoardDto boardDto) {
+		this.boardDto = boardDto;
 	}
 	
 	public static Page<DepartmentDto> converter(Page<DepartmentEntity> departments) {

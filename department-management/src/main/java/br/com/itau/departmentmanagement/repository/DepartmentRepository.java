@@ -10,8 +10,8 @@ import br.com.itau.departmentmanagement.model.DepartmentEntity;
 
 public interface DepartmentRepository extends JpaRepository<DepartmentEntity, Integer>{
 	
-	Page<DepartmentEntity> findByDirectoryEntityName(String directoryName, Pageable pagination);
-	
 	Optional<DepartmentEntity> findById(Integer departmentId);
+
+	Page<DepartmentEntity> findByBoardEntityName(String boardName, Pageable pagination);
 
 }

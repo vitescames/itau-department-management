@@ -7,10 +7,10 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import br.com.itau.departmentmanagement.controller.dto.DepartmentDto;
 import br.com.itau.departmentmanagement.exceptions.DepartmentNotFoundException;
-import br.com.itau.departmentmanagement.form.DepartmentForm;
 import br.com.itau.departmentmanagement.model.DepartmentEntity;
-import br.com.itau.departmentmanagement.model.DirectoryEntity;
+import br.com.itau.departmentmanagement.model.BoardEntity;
 import br.com.itau.departmentmanagement.repository.DepartmentRepository;
 import br.com.itau.departmentmanagement.service.DepartmentService;
 
@@ -21,8 +21,8 @@ public class DepartmentServiceImpl implements DepartmentService{
 	private DepartmentRepository departmentRepository;
 
 	@Override
-	public DepartmentEntity saveDepartment(DepartmentForm form, DirectoryEntity directoryEntity) {
-		DepartmentEntity department = new DepartmentEntity(form.getId(), form.getName(), form.getLocation(), form.getCity(), form.getState(), directoryEntity);
+	public DepartmentEntity saveDepartment(DepartmentDto form, BoardEntity boardEntity) {
+		DepartmentEntity department = new DepartmentEntity(form.getId(), form.getName(), form.getLocation(), form.getCity(), form.getState(), boardEntity);
 		return departmentRepository.save(department);
 	}
 
@@ -56,8 +56,8 @@ public class DepartmentServiceImpl implements DepartmentService{
 	}
 
 	@Override
-	public Page<DepartmentEntity> getDepartmentsByDirectory(String directoryName, Pageable pagination) {
-		return departmentRepository.findByDirectoryEntityName(directoryName, pagination);
+	public Page<DepartmentEntity> getDepartmentsByBoard(String boardName, Pageable pagination) {
+		return departmentRepository.findByBoardEntityName(boardName, pagination);
 	}
 
 	@Override

@@ -12,7 +12,7 @@ public class DepartmentForm {
 	
 	private String state;
 	
-	private Integer directoryEntityId;
+	private Integer boardEntityId;
 	
 	public DepartmentForm() {
 		
@@ -58,12 +58,12 @@ public class DepartmentForm {
 		this.state = state;
 	}
 
-	public Integer getDirectoryEntityId() {
-		return directoryEntityId;
+	public Integer getBoardEntityId() {
+		return boardEntityId;
 	}
 
-	public void setDirectoryEntityId(Integer directoryEntityId) {
-		this.directoryEntityId = directoryEntityId;
+	public void setBoardEntityId(Integer boardEntityId) {
+		this.boardEntityId = boardEntityId;
 	}
 
 }

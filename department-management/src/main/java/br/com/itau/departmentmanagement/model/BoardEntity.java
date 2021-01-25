@@ -6,14 +6,14 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Entity
-@Table(name="directory")
-public class DirectoryEntity {
+@Table(name="board")
+public class BoardEntity {
 	
 	@Id
-	@Column(name="directory_id", nullable=false, length=50)
+	@Column(name="board_id", nullable=false, length=50)
 	private Integer id;
 	
-	@Column(name="directory_name")
+	@Column(name="board_name")
 	private String name;
 
 	public Integer getId() {
