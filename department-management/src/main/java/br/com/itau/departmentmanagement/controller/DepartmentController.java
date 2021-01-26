@@ -31,7 +31,6 @@ import br.com.itau.departmentmanagement.response.ResponseMessage;
 import br.com.itau.departmentmanagement.service.DepartmentService;
 import br.com.itau.departmentmanagement.service.BoardService;
 
-
 @RestController
 @RequestMapping("/departments")
 public class DepartmentController {	
@@ -59,107 +58,57 @@ public class DepartmentController {
 	}
 	
 	@GetMapping("/{id}")
-	public ResponseEntity<?> getDepartment(@PathVariable Integer id) {
+	public ResponseEntity<?> getDepartment(@PathVariable Integer id) throws DepartmentNotFoundException{
+			
+		DepartmentEntity department = departmentService.getDepartmentById(id);
 		
-		try {
-			
-			DepartmentEntity department = departmentService.getDepartmentById(id);
-			
-			return ResponseEntity.ok(new DepartmentDto(department));
-
+		return ResponseEntity.ok(new DepartmentDto(department));
 		
-		} catch (DepartmentNotFoundException e) {
-			
-			e.printStackTrace();
-			
-			return ResponseEntity.status(HttpStatus.NOT_FOUND).
-					body(new ResponseMessage(HttpStatus.NOT_FOUND.toString(), "Department ID doesn't exist"));
-			
-		}
 	}
 	
 	@PutMapping("/{id}")
 	@Transactional
-	public ResponseEntity<ResponseMessage> updateDepartment(@PathVariable Integer id, @RequestBody DepartmentDto form) {
+	public ResponseEntity<ResponseMessage> updateDepartment(@PathVariable Integer id, @RequestBody DepartmentDto form) throws DepartmentNotFoundException, BoardNotFoundException{
 		
-		try {
+		DepartmentEntity department = departmentService.prepareForEdit(id);
+		department.setCity(form.getCity());
+		department.setBoardEntity(boardService.getBoardById(form.getBoardDto().getId()));
+		department.setLocation(form.getLocation());
+		department.setName(form.getName());
+		department.setState(form.getState());
 		
-			DepartmentEntity department = departmentService.prepareForEdit(id);
-			department.setCity(form.getCity());
-			department.setBoardEntity(boardService.getBoardById(form.getBoardDto().getId()));
-			department.setLocation(form.getLocation());
-			department.setName(form.getName());
-			department.setState(form.getState());
-			
-			return ResponseEntity.ok(new ResponseMessage(HttpStatus.OK.toString(), "Department update was done successfully"));
-			
+		return ResponseEntity.ok(new ResponseMessage(HttpStatus.OK.toString(), "Department update was done successfully"));
 					
-		} catch (DepartmentNotFoundException e) {
-			
-			e.printStackTrace();
-			
-			return ResponseEntity.status(HttpStatus.NOT_FOUND).
-					body(new ResponseMessage(HttpStatus.NOT_FOUND.toString(), "Department ID doesn't exist"));
-			
-		} catch (BoardNotFoundException e) {
-			
-			e.printStackTrace();
-			
-			return ResponseEntity.status(HttpStatus.NOT_FOUND).
-					body(new ResponseMessage(HttpStatus.NOT_FOUND.toString(), "Board ID doesn't exist"));
-			
-		}
 	}
 	
 	@PostMapping
 	@Transactional
-	public ResponseEntity<?> saveDepartment(@RequestBody DepartmentDto form, UriComponentsBuilder uriBuilder) {
+	public ResponseEntity<?> saveDepartment(@RequestBody DepartmentDto form, UriComponentsBuilder uriBuilder) throws BoardNotFoundException{
 		
-		try {
+		BoardEntity boardEntity = boardService.getBoardById(form.getBoardDto().getId());
 		
-			BoardEntity boardEntity = boardService.getBoardById(form.getBoardDto().getId());
-			
-			Boolean existingDepartment = departmentService.checkIfDepartmentExists(form.getId());
-			
-			if(existingDepartment) {
-				return ResponseEntity.status(HttpStatus.BAD_REQUEST).
-						body(new ResponseMessage(HttpStatus.BAD_REQUEST.toString(), "Department already exists"));
-			}
-			
-			DepartmentEntity department = departmentService.saveDepartment(form, boardEntity);
-			
-			URI uri = uriBuilder.path("/departments/{id}").buildAndExpand(department.getId()).toUri();
-			return ResponseEntity.created(uri).body(new DepartmentDto(department));
+		Boolean existingDepartment = departmentService.checkIfDepartmentExists(form.getId());
 		
-		}  catch (BoardNotFoundException e) {
-			
-			e.printStackTrace();
-			
-			return ResponseEntity.status(HttpStatus.NOT_FOUND).
-					body(new ResponseMessage(HttpStatus.NOT_FOUND.toString(), "Board ID doesn't exist"));
-			
+		if(existingDepartment) {
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).
+					body(new ResponseMessage(HttpStatus.BAD_REQUEST.toString(), "Department already exists"));
 		}
+		
+		DepartmentEntity department = departmentService.saveDepartment(form, boardEntity);
+		
+		URI uri = uriBuilder.path("/departments/{id}").buildAndExpand(department.getId()).toUri();
+		return ResponseEntity.created(uri).body(new DepartmentDto(department));
 		
 	}
 	
 	@DeleteMapping("/{id}")
 	@Transactional
-	public ResponseEntity<ResponseMessage> deleteDepartment(@PathVariable Integer id) {
+	public ResponseEntity<ResponseMessage> deleteDepartment(@PathVariable Integer id) throws DepartmentNotFoundException{
 		
-		try {
+		departmentService.deleteDepartment(id);
 		
-			departmentService.deleteDepartment(id);
-			
-			return ResponseEntity.ok(new ResponseMessage(HttpStatus.OK.toString(), "Department deletion was done successfully"));
+		return ResponseEntity.ok(new ResponseMessage(HttpStatus.OK.toString(), "Department deletion was done successfully"));
 		
-		} catch (DepartmentNotFoundException e) {
-			
-			e.printStackTrace();
-		
-			return ResponseEntity.status(HttpStatus.NOT_FOUND).
-					body(new ResponseMessage(HttpStatus.NOT_FOUND.toString(), "Department ID doesn't exist"));
-		
-		}
 	}
 
 }

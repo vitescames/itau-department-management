@@ -5,6 +5,7 @@ import { DepartmentService } from './../service/department/department.service';
 import { DepartmentDto } from './../dto/department-dto';
 import { Component, OnInit } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
+import { NgForm } from '@angular/forms';
 
 @Component({
   selector: 'app-home',
@@ -59,23 +60,29 @@ export class HomeComponent implements OnInit {
     this.departmentDto.boardDto = departmentDto.boardDto;
   }
 
-  saveDepartment(){
+  saveDepartment(f: NgForm){
 
     this.departmentService.saveDepartment(this.departmentDto).subscribe(response =>{
       this.departments.push(response);
       this.dataSource = new MatTableDataSource(this.departments);
       this.departmentDto = new DepartmentDto();
+      f.resetForm();
+    }, error => {
+      if(error.includes("400")){
+        f.controls['id'].setErrors({'alreadyExists' : true});
+      }
     });
 
   }
 
-  updateDepartment(){
+  updateDepartment(f: NgForm){
 
     this.departmentService.updateDepartment(this.departmentDto).subscribe(response =>{
       this.dataSource.data.splice(this.indexToUpdate, 1, this.departmentDto);
       this.dataSource.data = this.dataSource.data;
       this.departmentDto = new DepartmentDto();
       this.updateMode = false;
+      f.resetForm();
     });
 
   }
@@ -93,6 +100,15 @@ export class HomeComponent implements OnInit {
 
     this.boardService.getBoards().subscribe(response =>{
       this.boards = response["content"];
+    });
+
+  }
+
+  deleteDepartment(id : number, index : number){
+
+    this.departmentService.deleteDepartment(id).subscribe(response =>{
+      this.dataSource.data.splice(index, 1);
+      this.dataSource.data = this.dataSource.data;
     });
 
   }

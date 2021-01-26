@@ -45,7 +45,7 @@ public class DepartmentServiceImpl implements DepartmentService{
 		if(departmentEntity.isPresent()) {
 			return departmentEntity.get();
 		} else {
-			throw new DepartmentNotFoundException("Department ID not found");
+			throw new DepartmentNotFoundException();
 		}
 		
 	}

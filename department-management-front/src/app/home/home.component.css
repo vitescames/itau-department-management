@@ -7,3 +7,16 @@
     background-color: #EC7000;
     color: white;
 }
+
+.error-popup{
+    background-color: #ffafaf;
+    color: #bf1515;
+    border-radius: 20px;
+    margin-top: 15px;
+}
+
+.error-popup p{
+    padding-left: 10px;
+    margin-bottom: 10px;
+    margin-top: 10px;
+}

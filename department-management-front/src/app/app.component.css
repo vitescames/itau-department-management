@@ -1,3 +1,8 @@
 .mat-color-itau{
     background-color: #EC7000;
 }
+
+.img-fluid{
+    max-width: 2.5%; 
+    margin-right: 20px;
+}
