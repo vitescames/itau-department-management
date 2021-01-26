@@ -27,7 +27,7 @@
           <div fxFlex="8" fxLayoutAlign="start center">
               Estado:
           </div>
-          <mat-form-field fxFlex="30">
+          <mat-form-field fxFlex="20">
             <mat-select [(ngModel)]="departmentDto.state" name="state" required>
               <mat-option *ngFor="let state of states; let i = index" [value]="state">{{state}}</mat-option>
             </mat-select>

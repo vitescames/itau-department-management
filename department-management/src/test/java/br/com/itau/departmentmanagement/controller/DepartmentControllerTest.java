@@ -6,8 +6,10 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
+import static org.hamcrest.Matchers.containsString;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -26,7 +28,7 @@ public class DepartmentControllerTest {
     private ObjectMapper objectMapper;
 
     @Test
-    void saveDepartment() throws Exception{
+    void saveDepartmentTest() throws Exception{
     	
     	DepartmentDto departmentDto = new DepartmentDto();
     	departmentDto.setId(5);
@@ -42,5 +44,17 @@ public class DepartmentControllerTest {
     			.andExpect(MockMvcResultMatchers.status().isCreated());
     	
     }
+    
+    @Test
+	public void getDepartmentsTest() throws Exception {
+		this.mockMvc.perform(MockMvcRequestBuilders.get("/departments")).andDo(MockMvcResultHandlers.print()).andExpect(MockMvcResultMatchers.status().isOk())
+				.andExpect(MockMvcResultMatchers.content().string(containsString("content")));
+	}
+    
+    @Test
+	public void deleteDepartmentTest() throws Exception {
+		this.mockMvc.perform(MockMvcRequestBuilders.delete("/departments/1")).andDo(MockMvcResultHandlers.print()).andExpect(MockMvcResultMatchers.status().isOk())
+				.andExpect(MockMvcResultMatchers.content().string(containsString("successfully")));
+	}
 
 }
