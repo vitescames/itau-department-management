@@ -25,6 +25,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 import br.com.itau.departmentmanagement.controller.dto.DepartmentDto;
 import br.com.itau.departmentmanagement.exceptions.DepartmentNotFoundException;
 import br.com.itau.departmentmanagement.exceptions.BoardNotFoundException;
+import br.com.itau.departmentmanagement.exceptions.DepartmentAlreadyExistingException;
 import br.com.itau.departmentmanagement.model.DepartmentEntity;
 import br.com.itau.departmentmanagement.model.BoardEntity;
 import br.com.itau.departmentmanagement.response.ResponseMessage;
@@ -83,15 +84,14 @@ public class DepartmentController {
 	
 	@PostMapping
 	@Transactional
-	public ResponseEntity<?> saveDepartment(@RequestBody DepartmentDto form, UriComponentsBuilder uriBuilder) throws BoardNotFoundException{
+	public ResponseEntity<?> saveDepartment(@RequestBody DepartmentDto form, UriComponentsBuilder uriBuilder) throws BoardNotFoundException, DepartmentAlreadyExistingException{
 		
 		BoardEntity boardEntity = boardService.getBoardById(form.getBoardDto().getId());
 		
 		Boolean existingDepartment = departmentService.checkIfDepartmentExists(form.getId());
 		
 		if(existingDepartment) {
-			return ResponseEntity.status(HttpStatus.BAD_REQUEST).
-					body(new ResponseMessage(HttpStatus.BAD_REQUEST.toString(), "Department already exists"));
+			throw new DepartmentAlreadyExistingException();
 		}
 		
 		DepartmentEntity department = departmentService.saveDepartment(form, boardEntity);

@@ -1,6 +1,7 @@
 package br.com.itau.departmentmanagement.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort.Direction;
@@ -21,6 +22,7 @@ public class BoardController {
 	private BoardService boardService;
 	
 	@GetMapping
+	@Cacheable(value = "listaDeTopicos")
 	public Page<BoardDto> listBoards(@PageableDefault(sort = "id", direction = Direction.ASC, page = 0, size = 10) Pageable pagination) {
 		
 		Page<BoardEntity> boards = null;

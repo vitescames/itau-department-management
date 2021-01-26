@@ -10,10 +10,10 @@ import javax.persistence.Table;
 public class BoardEntity {
 	
 	@Id
-	@Column(name="board_id", nullable=false, length=50)
+	@Column(name="board_id")
 	private Integer id;
 	
-	@Column(name="board_name")
+	@Column(name="board_name", nullable=false, length=50)
 	private String name;
 
 	public Integer getId() {

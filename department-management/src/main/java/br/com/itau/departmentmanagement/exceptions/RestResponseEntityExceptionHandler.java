@@ -25,5 +25,12 @@ public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionH
 		return ResponseEntity.status(HttpStatus.NOT_FOUND).
 				body(new ResponseMessage(HttpStatus.NOT_FOUND.toString(), "Board ID doesn't exist"));
     }
+	
+	@ExceptionHandler(value = { DepartmentAlreadyExistingException.class})
+    public ResponseEntity<Object> handleDepartmentAlreadyExisting(Exception ex, WebRequest request) {
+		ex.printStackTrace();		
+		return ResponseEntity.status(HttpStatus.BAD_REQUEST).
+		body(new ResponseMessage(HttpStatus.BAD_REQUEST.toString(), "Department already exists"));
+    }
 
 }
