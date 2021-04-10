@@ -88,11 +88,7 @@ public class DepartmentController {
 		
 		BoardEntity boardEntity = boardService.getBoardById(form.getBoardDto().getId());
 		
-		Boolean existingDepartment = departmentService.checkIfDepartmentExists(form.getId());
-		
-		if(existingDepartment) {
-			throw new DepartmentAlreadyExistingException();
-		}
+		departmentService.checkIfDepartmentExists(form.getId());
 		
 		DepartmentEntity department = departmentService.saveDepartment(form, boardEntity);
 		

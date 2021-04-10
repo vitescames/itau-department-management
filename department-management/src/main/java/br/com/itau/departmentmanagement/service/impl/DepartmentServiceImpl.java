@@ -8,6 +8,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import br.com.itau.departmentmanagement.controller.dto.DepartmentDto;
+import br.com.itau.departmentmanagement.exceptions.DepartmentAlreadyExistingException;
 import br.com.itau.departmentmanagement.exceptions.DepartmentNotFoundException;
 import br.com.itau.departmentmanagement.model.DepartmentEntity;
 import br.com.itau.departmentmanagement.model.BoardEntity;
@@ -69,14 +70,12 @@ public class DepartmentServiceImpl implements DepartmentService{
 	}
 
 	@Override
-	public Boolean checkIfDepartmentExists(Integer id) {
+	public void checkIfDepartmentExists(Integer id) throws DepartmentAlreadyExistingException {
 		
 		Optional<DepartmentEntity> departmentEntity = departmentRepository.findById(id);
 		
 		if(departmentEntity.isPresent())
-			return true;
-		else
-			return false;
+			throw new DepartmentAlreadyExistingException();
 		
 	}
 
